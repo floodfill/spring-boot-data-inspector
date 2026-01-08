@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "data-inspector",
+      "type": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "com.example.datainspector.config.DataInspectorProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "data-inspector.base-path",
+      "type": "java.lang.String",
+      "description": "Base path for the Data Inspector UI",
+      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "defaultValue": "\/data-inspector"
+    },
+    {
+      "name": "data-inspector.discover-beans",
+      "type": "java.lang.Boolean",
+      "description": "Enable auto-discovery of Spring beans",
+      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "data-inspector.discover-caches",
+      "type": "java.lang.Boolean",
+      "description": "Enable auto-discovery of caches",
+      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "data-inspector.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable or disable the Data Inspector",
+      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "data-inspector.mongodb-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable MongoDB integration",
+      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "defaultValue": true
+    }
+  ],
+  "hints": []
+}

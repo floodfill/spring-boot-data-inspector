@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // MongoDB (optional)
+    compileOnly 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // Cache support (optional)
+    compileOnly 'org.springframework.boot:spring-boot-starter-cache'
+    compileOnly 'com.github.ben-manes.caffeine:caffeine'
+
+    // Jackson for JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // Lombok for cleaner code
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+}
