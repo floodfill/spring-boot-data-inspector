@@ -25,13 +25,20 @@ data-inspector-demo/
 │       │   ├── provider/                       # Auto-discovery providers
 │       │   │   ├── CacheDataSourceProvider.java      # Discovers Spring caches
 │       │   │   ├── BeanDataSourceProvider.java       # Discovers Spring beans
-│       │   │   └── MongoDBDataSourceProvider.java    # MongoDB integration
+│       │   │   ├── MongoDBDataSourceProvider.java    # MongoDB integration
+│       │   │   ├── JpaDataSourceProvider.java        # JPA/SQL entities
+│       │   │   ├── JvmMetricsProvider.java           # JVM metrics (memory, threads, GC)
+│       │   │   ├── HttpRequestTracker.java           # HTTP request tracking
+│       │   │   ├── ScheduledTasksProvider.java       # Scheduled tasks monitoring
+│       │   │   └── EnvironmentProvider.java          # Environment variables & properties
 │       │   │
 │       │   ├── registry/
 │       │   │   └── CustomDataSourceRegistry.java     # Manual registration
 │       │   │
 │       │   ├── service/
-│       │   │   └── DataInspectorService.java         # Core service
+│       │   │   ├── DataInspectorService.java         # Core service
+│       │   │   ├── ExportService.java                # Export to CSV/JSON/Excel/HTML/MD
+│       │   │   └── TelemetryService.java             # Usage analytics & telemetry
 │       │   │
 │       │   ├── controller/
 │       │   │   ├── DataInspectorController.java      # REST API
@@ -80,13 +87,20 @@ data-inspector-demo/
 - `CacheDataSourceProvider` - Finds all Spring caches (Caffeine, ConcurrentMap)
 - `BeanDataSourceProvider` - Exposes Spring beans and their internal state
 - `MongoDBDataSourceProvider` - MongoDB stats and collections
+- `JpaDataSourceProvider` - JPA entities and SQL database tables
+- `JvmMetricsProvider` - JVM metrics (memory, threads, GC, CPU)
+- `HttpRequestTracker` - HTTP request tracking with timing
+- `ScheduledTasksProvider` - @Scheduled tasks monitoring
+- `EnvironmentProvider` - Environment variables and application properties
 
 **Core Features**:
 - Zero-config auto-configuration via `spring.factories`
 - REST API for programmatic access
 - Beautiful single-page web dashboard
-- Pagination, filtering, and JSON export
+- Pagination, filtering, and export (CSV, JSON, Excel, HTML, Markdown)
 - Custom data source registration API
+- Usage analytics and telemetry
+- Sensitive data masking
 
 ### Demo Application
 
@@ -208,16 +222,28 @@ http.authorizeRequests()
     .antMatchers("/data-inspector/**").hasRole("ADMIN");
 ```
 
+## Recent Enhancements (v1.0)
+
+✅ **Completed**:
+- Export to CSV, JSON, Excel, HTML, Markdown
+- Usage analytics and telemetry tracking
+- JPA/SQL database inspection
+- JVM metrics monitoring
+- HTTP request tracking
+- Scheduled tasks monitoring
+- Environment and properties inspection
+- MIT license with proper headers
+
 ## Future Enhancements
 
 Possible improvements:
 - Real-time updates via WebSocket
-- Search/filter UI
+- Advanced UI with React/Vue
 - Data editing capabilities
-- Export to CSV/Excel
+- PDF export format
 - Query builder UI
-- Performance metrics
-- Request tracing integration
+- More chart visualizations
+- Alerts and notifications
 
 ---
 

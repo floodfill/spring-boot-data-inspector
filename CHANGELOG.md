@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Export Capabilities** - Export data to CSV, JSON, Excel, HTML, Markdown formats
+- **Telemetry & Analytics** - Track usage patterns, popular data sources, and errors
+- **License Headers** - MIT license headers on all source files
 - JPA/SQL data source provider for database table inspection
 - JVM metrics provider (memory, threads, GC, CPU, system info)
 - HTTP request tracker with timing and statistics
@@ -22,15 +25,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Issue templates for bugs and feature requests
 - Contributing guidelines
 - MIT License
+- Export and Analytics documentation (EXPORT_AND_ANALYTICS.md)
 
 ### Changed
 - Complete README rewrite with comprehensive usage guide
 - Enhanced demo application with multiple examples
 - Improved project structure and documentation
+- All Java files now include proper license headers
 
 ### Security
 - Added sensitive data masking for environment variables and properties
 - Implemented security configuration properties
+- Export endpoints support authorization controls
 
 ## [1.0.0] - TBD
 

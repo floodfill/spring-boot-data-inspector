@@ -29,6 +29,8 @@ Data Inspector automatically discovers and exposes:
 - **Zero Configuration** - Just add the dependency - works out of the box
 - **Production-Ready** - Disable with a single property, secure with Spring Security
 - **Sensitive Data Masking** - Automatically masks passwords, secrets, and tokens
+- **Export Capabilities** - Export to CSV, JSON, Excel, HTML, Markdown
+- **Usage Analytics** - Track usage patterns and optimize performance
 
 ## Quick Start
 
@@ -211,9 +213,78 @@ data-inspector.environmentEnabled=true
 data-inspector.maxTrackedHttpRequests=1000
 data-inspector.maskSensitiveData=true
 
+# Export settings
+data-inspector.exportEnabled=true
+data-inspector.maxExportRecords=10000
+
+# Analytics settings
+data-inspector.telemetryEnabled=true
+
 # Security (optional)
 data-inspector.requireAuth=false
 data-inspector.allowedRoles=ADMIN,DEVELOPER
+```
+
+## Export Data
+
+Export any data source to multiple formats:
+
+```bash
+# Export as CSV
+GET /data-inspector/api/datasources/{id}/export?format=csv
+
+# Export as JSON
+GET /data-inspector/api/datasources/{id}/export?format=json
+
+# Export as Excel (CSV with BOM)
+GET /data-inspector/api/datasources/{id}/export?format=excel
+
+# Export as HTML table
+GET /data-inspector/api/datasources/{id}/export?format=html
+
+# Export as Markdown
+GET /data-inspector/api/datasources/{id}/export?format=markdown
+```
+
+Example:
+```bash
+# Export users to CSV
+curl -o users.csv \
+  "http://localhost:8080/data-inspector/api/datasources/jpa:entity:User/export?format=csv"
+
+# Export with filters
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"status":"active"}' \
+  -o active_users.json \
+  "http://localhost:8080/data-inspector/api/datasources/jpa:entity:User/export?format=json"
+```
+
+See [EXPORT_AND_ANALYTICS.md](EXPORT_AND_ANALYTICS.md) for detailed documentation.
+
+## Usage Analytics
+
+Track how Data Inspector is being used:
+
+```bash
+# Get overall analytics
+GET /data-inspector/api/analytics
+
+# Get analytics for last 24 hours
+GET /data-inspector/api/analytics/period?hours=24
+```
+
+Analytics include:
+- Query counts by data source
+- Export format popularity
+- Daily active users
+- Error tracking
+- Recent activity
+
+Configuration:
+```properties
+# Enable/disable telemetry (default: true)
+data-inspector.telemetryEnabled=true
 ```
 
 ## REST API

@@ -1,6 +1,41 @@
+# Compiled class files
 *.class
-**/build/*
-.github
-.idea
-.planning
-*.lock
+
+# Build directories
+build/
+**/build/
+target/
+out/
+
+# Gradle
+.gradle/
+*.gradle.kts
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.classpath
+.project
+
+# Planning directories (optional)
+.planning/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
