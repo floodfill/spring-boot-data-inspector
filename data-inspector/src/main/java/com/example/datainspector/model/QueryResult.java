@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2026 Data Inspector Contributors
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
 package com.example.datainspector.model;
 
 import lombok.AllArgsConstructor;

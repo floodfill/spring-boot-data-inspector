@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2026 Data Inspector Contributors
+ * Licensed under the MIT License. See LICENSE file in the project root.
+ */
 package com.example.datainspector.config;
 
 import lombok.Data;
@@ -80,4 +84,20 @@ public class DataInspectorProperties {
      * Allowed roles to access Data Inspector (when requireAuth is true)
      */
     private String[] allowedRoles = {"ADMIN", "DEVELOPER"};
+
+    /**
+     * Enable telemetry and usage analytics
+     * Helps improve Data Inspector by understanding usage patterns
+     */
+    private boolean telemetryEnabled = true;
+
+    /**
+     * Enable export functionality
+     */
+    private boolean exportEnabled = true;
+
+    /**
+     * Maximum records to export at once
+     */
+    private int maxExportRecords = 10000;
 }

@@ -1,0 +1,6 @@
+*.class
+**/build/*
+.github
+.idea
+.planning
+*.lock
