@@ -34,4 +34,50 @@ public class DataInspectorProperties {
      * Enable MongoDB integration
      */
     private boolean mongodbEnabled = true;
+
+    /**
+     * Enable JPA/SQL integration
+     */
+    private boolean jpaEnabled = true;
+
+    /**
+     * Enable JVM metrics monitoring
+     */
+    private boolean jvmMetricsEnabled = true;
+
+    /**
+     * Enable HTTP request tracking
+     */
+    private boolean trackHttpRequests = true;
+
+    /**
+     * Enable scheduled tasks monitoring
+     */
+    private boolean scheduledTasksEnabled = true;
+
+    /**
+     * Enable environment and properties monitoring
+     */
+    private boolean environmentEnabled = true;
+
+    /**
+     * Maximum number of HTTP requests to track
+     */
+    private int maxTrackedHttpRequests = 1000;
+
+    /**
+     * Mask sensitive property values (password, secret, token, etc.)
+     */
+    private boolean maskSensitiveData = true;
+
+    /**
+     * Require authentication to access Data Inspector
+     * When true, endpoints are secured using Spring Security if available
+     */
+    private boolean requireAuth = false;
+
+    /**
+     * Allowed roles to access Data Inspector (when requireAuth is true)
+     */
+    private String[] allowedRoles = {"ADMIN", "DEVELOPER"};
 }

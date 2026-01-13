@@ -35,6 +35,84 @@ public class CustomDataSourceRegistry implements DataSourceProvider {
     }
 
     /**
+     * Register a Map as a data source
+     * The map will be exposed with its entries as rows
+     *
+     * @param id Unique identifier
+     * @param name Display name
+     * @param description Description
+     * @param map The map to expose
+     */
+    public void registerMap(String id, String name, String description, Map<?, ?> map) {
+        Supplier<Collection<?>> supplier = () -> {
+            List<Map<String, Object>> entries = new ArrayList<>();
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                Map<String, Object> row = new LinkedHashMap<>();
+                row.put("key", entry.getKey());
+                row.put("value", entry.getValue());
+                row.put("keyType", entry.getKey() != null ? entry.getKey().getClass().getSimpleName() : "null");
+                row.put("valueType", entry.getValue() != null ? entry.getValue().getClass().getSimpleName() : "null");
+                entries.add(row);
+            }
+            return entries;
+        };
+        register(id, name, description, supplier);
+    }
+
+    /**
+     * Register a Map with custom key-value transformers
+     *
+     * @param id Unique identifier
+     * @param name Display name
+     * @param description Description
+     * @param map The map to expose
+     * @param keyTransformer Function to transform keys to display strings
+     * @param valueTransformer Function to transform values to display objects
+     */
+    public <K, V> void registerMap(String id, String name, String description,
+                                    Map<K, V> map,
+                                    java.util.function.Function<K, String> keyTransformer,
+                                    java.util.function.Function<V, Object> valueTransformer) {
+        Supplier<Collection<?>> supplier = () -> {
+            List<Map<String, Object>> entries = new ArrayList<>();
+            for (Map.Entry<K, V> entry : map.entrySet()) {
+                Map<String, Object> row = new LinkedHashMap<>();
+                row.put("key", keyTransformer.apply(entry.getKey()));
+                row.put("value", valueTransformer.apply(entry.getValue()));
+                entries.add(row);
+            }
+            return entries;
+        };
+        register(id, name, description, supplier);
+    }
+
+    /**
+     * Register any object that implements java.util.Map interface
+     * Works with ConcurrentHashMap, LinkedHashMap, TreeMap, WeakHashMap, etc.
+     *
+     * @param id Unique identifier
+     * @param name Display name
+     * @param description Description
+     * @param mapSupplier Supplier that returns the map
+     */
+    public void registerMapSupplier(String id, String name, String description, Supplier<? extends Map<?, ?>> mapSupplier) {
+        Supplier<Collection<?>> supplier = () -> {
+            Map<?, ?> map = mapSupplier.get();
+            List<Map<String, Object>> entries = new ArrayList<>();
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                Map<String, Object> row = new LinkedHashMap<>();
+                row.put("key", entry.getKey());
+                row.put("value", entry.getValue());
+                row.put("keyType", entry.getKey() != null ? entry.getKey().getClass().getSimpleName() : "null");
+                row.put("valueType", entry.getValue() != null ? entry.getValue().getClass().getSimpleName() : "null");
+                entries.add(row);
+            }
+            return entries;
+        };
+        register(id, name, description, supplier);
+    }
+
+    /**
      * Unregister a data source
      */
     public void unregister(String id) {

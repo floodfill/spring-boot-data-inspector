@@ -26,6 +26,8 @@ public class CustomDataSourceConfig {
 
     // Custom in-memory data structures to expose
     private final Map<String, String> sessionCache = new ConcurrentHashMap<>();
+    private final Map<Long, String> userIdToName = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, Object>> connectionPool = new ConcurrentHashMap<>();
     private final Queue<String> requestQueue = new LinkedList<>();
 
     @Bean
@@ -47,15 +49,59 @@ public class CustomDataSourceConfig {
                     () -> productService.getInMemoryProducts()
             );
 
-            // Register session cache
+            // Example 1: Register a simple Map directly
             sessionCache.put("session-1", "user-alice");
             sessionCache.put("session-2", "user-bob");
             sessionCache.put("session-3", "user-charlie");
+            sessionCache.put("session-4", "user-diana");
 
+            registry.registerMap(
+                    "session-map",
+                    "Session Map (Direct)",
+                    "Simple ConcurrentHashMap tracking active sessions",
+                    sessionCache
+            );
+
+            // Example 2: Register a Map with custom transformers
+            userIdToName.put(1L, "Alice Smith");
+            userIdToName.put(2L, "Bob Jones");
+            userIdToName.put(3L, "Charlie Brown");
+
+            registry.registerMap(
+                    "user-id-map",
+                    "User ID to Name Map",
+                    "Map of user IDs to names with custom formatting",
+                    userIdToName,
+                    id -> "User#" + id,
+                    name -> Map.of("fullName", name, "length", name.length())
+            );
+
+            // Example 3: Register a complex Map structure
+            connectionPool.put("conn-1", Map.of(
+                    "host", "db-primary.example.com",
+                    "port", 5432,
+                    "status", "ACTIVE",
+                    "lastUsed", System.currentTimeMillis()
+            ));
+            connectionPool.put("conn-2", Map.of(
+                    "host", "db-replica.example.com",
+                    "port", 5432,
+                    "status", "IDLE",
+                    "lastUsed", System.currentTimeMillis() - 60000
+            ));
+
+            registry.registerMapSupplier(
+                    "connection-pool",
+                    "Database Connection Pool",
+                    "Active database connections with status",
+                    () -> connectionPool
+            );
+
+            // Example 4: Old style with Collection for backward compatibility
             registry.register(
-                    "session-cache",
-                    "Active Sessions",
-                    "Currently active user sessions",
+                    "session-cache-old",
+                    "Active Sessions (Legacy)",
+                    "Currently active user sessions (old registration style)",
                     () -> sessionCache.entrySet().stream()
                             .map(e -> Map.of("sessionId", e.getKey(), "userId", e.getValue()))
                             .toList()
@@ -65,6 +111,7 @@ public class CustomDataSourceConfig {
             requestQueue.offer("/api/users - GET");
             requestQueue.offer("/api/products - GET");
             requestQueue.offer("/api/users/1 - GET");
+            requestQueue.offer("/api/cache/clear - POST");
 
             registry.register(
                     "request-queue",
@@ -75,7 +122,7 @@ public class CustomDataSourceConfig {
                             .toList()
             );
 
-            log.info("Registered {} custom data sources", 4);
+            log.info("Registered {} custom data sources with various Map examples", 7);
         };
     }
 }

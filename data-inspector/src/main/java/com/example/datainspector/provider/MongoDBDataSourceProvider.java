@@ -160,11 +160,21 @@ public class MongoDBDataSourceProvider implements DataSourceProvider {
     }
 
     private QueryResult queryCollection(String collectionName, Map<String, Object> filters, int limit, int offset) {
-        long totalCount = mongoTemplate.getCollection(collectionName).countDocuments();
+        // Build filter document
+        Document filterDoc = new Document();
+        if (filters != null && !filters.isEmpty()) {
+            for (Map.Entry<String, Object> entry : filters.entrySet()) {
+                // Support simple equality filters
+                // For more complex queries, users can use MongoDB compass or shell
+                filterDoc.append(entry.getKey(), entry.getValue());
+            }
+        }
 
-        // Get sample documents
+        long totalCount = mongoTemplate.getCollection(collectionName).countDocuments(filterDoc);
+
+        // Get documents with filters
         List<Map<String, Object>> documents = mongoTemplate.getCollection(collectionName)
-                .find()
+                .find(filterDoc)
                 .skip(offset)
                 .limit(limit)
                 .into(new ArrayList<>())
@@ -178,7 +188,10 @@ public class MongoDBDataSourceProvider implements DataSourceProvider {
                 .totalCount(totalCount)
                 .limit(limit)
                 .offset(offset)
-                .stats(Map.of("collectionName", collectionName))
+                .stats(Map.of(
+                        "collectionName", collectionName,
+                        "filtersApplied", filters != null ? filters.size() : 0
+                ))
                 .build();
     }
 

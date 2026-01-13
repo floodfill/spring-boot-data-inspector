@@ -12,6 +12,9 @@ dependencies {
     // MongoDB (optional)
     compileOnly 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
+    // JPA support (optional)
+    compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     // Cache support (optional)
     compileOnly 'org.springframework.boot:spring-boot-starter-cache'
     compileOnly 'com.github.ben-manes.caffeine:caffeine'
