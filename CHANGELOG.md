@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Scala Implementation** - Complete Scala version of Data Inspector (data-inspector-scala module)
+  - Functional Scala with case classes and pattern matching
+  - Same features as Java version with Scala idioms
+  - Full Spring Boot integration and Java interoperability
+  - Comprehensive Scala-specific documentation
 - **Export Capabilities** - Export data to CSV, JSON, Excel, HTML, Markdown formats
 - **Telemetry & Analytics** - Track usage patterns, popular data sources, and errors
 - **License Headers** - MIT license headers on all source files

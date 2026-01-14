@@ -32,6 +32,17 @@ Data Inspector automatically discovers and exposes:
 - **Export Capabilities** - Export to CSV, JSON, Excel, HTML, Markdown
 - **Usage Analytics** - Track usage patterns and optimize performance
 
+## Available Implementations
+
+Data Inspector is available in two implementations:
+
+- **Java Version** (`data-inspector/`) - Standard Java implementation with Lombok
+- **Scala Version** (`data-inspector-scala/`) - Functional Scala implementation with case classes and pattern matching
+
+Both versions provide the same features and REST API. Choose based on your project's language preference.
+
+See [data-inspector-scala/README.md](data-inspector-scala/README.md) for Scala-specific documentation.
+
 ## Quick Start
 
 ### 1. Add to your project

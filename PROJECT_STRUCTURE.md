@@ -2,16 +2,17 @@
 
 ## Overview
 
-This is a multi-module Gradle project with a reusable Data Inspector library and a demo application.
+This is a multi-module Gradle project with Data Inspector libraries (Java and Scala implementations) and a demo application.
 
 ```
 data-inspector-demo/
 ├── build.gradle                    # Root build configuration
-├── settings.gradle                 # Module definitions
+├── settings.gradle                 # Module definitions (includes data-inspector, data-inspector-scala, demo-app)
 ├── README.md                       # Main documentation
 ├── QUICKSTART.md                   # Quick start guide
+├── SCALA_IMPLEMENTATION.md         # Scala implementation summary
 │
-├── data-inspector/                 # Core reusable module
+├── data-inspector/                 # Core reusable module (Java)
 │   ├── build.gradle
 │   └── src/main/
 │       ├── java/com/example/datainspector/
@@ -53,6 +54,39 @@ data-inspector-demo/
 │           │   └── spring.factories            # Enable auto-config
 │           └── data-inspector-ui.html          # Beautiful web dashboard
 │
+├── data-inspector-scala/           # Core reusable module (Scala)
+│   ├── build.gradle
+│   ├── README.md                               # Scala-specific documentation
+│   └── src/main/
+│       ├── scala/com/example/datainspector/
+│       │   ├── model/
+│       │   │   ├── DataSourceInfo.scala         # Data source case class
+│       │   │   └── QueryResult.scala            # Query result case class
+│       │   │
+│       │   ├── spi/
+│       │   │   └── DataSourceProvider.scala     # Provider trait
+│       │   │
+│       │   ├── provider/                        # Auto-discovery providers
+│       │   │   ├── JvmMetricsProvider.scala     # JVM metrics (memory, threads, GC)
+│       │   │   ├── JpaDataSourceProvider.scala  # JPA/SQL entities
+│       │   │   └── EnvironmentProvider.scala    # Environment & properties
+│       │   │
+│       │   ├── service/
+│       │   │   ├── DataInspectorService.scala   # Core service
+│       │   │   ├── ExportService.scala          # Export to CSV/JSON/Excel/HTML/MD
+│       │   │   └── TelemetryService.scala       # Usage analytics & telemetry
+│       │   │
+│       │   ├── controller/
+│       │   │   └── DataInspectorController.scala # REST API
+│       │   │
+│       │   └── config/
+│       │       ├── DataInspectorAutoConfiguration.scala # Auto-config
+│       │       └── DataInspectorProperties.scala        # Properties
+│       │
+│       └── resources/
+│           └── META-INF/
+│               └── spring.factories             # Enable auto-config
+│
 └── demo-app/                       # Demo application
     ├── build.gradle
     └── src/main/
@@ -81,9 +115,21 @@ data-inspector-demo/
 
 ## Key Components
 
-### Data Inspector Module
+### Data Inspector Modules
 
-**Auto-Discovery Providers**:
+The project includes **two implementations** with identical functionality:
+
+#### Java Implementation (`data-inspector/`)
+- Standard Java with Lombok
+- All providers and features listed below
+
+#### Scala Implementation (`data-inspector-scala/`)
+- Functional Scala with case classes and pattern matching
+- Same features as Java version
+- Scala-specific benefits: immutability, Option types, pattern matching
+- See [data-inspector-scala/README.md](data-inspector-scala/README.md) for details
+
+**Auto-Discovery Providers** (both implementations):
 - `CacheDataSourceProvider` - Finds all Spring caches (Caffeine, ConcurrentMap)
 - `BeanDataSourceProvider` - Exposes Spring beans and their internal state
 - `MongoDBDataSourceProvider` - MongoDB stats and collections
@@ -93,7 +139,7 @@ data-inspector-demo/
 - `ScheduledTasksProvider` - @Scheduled tasks monitoring
 - `EnvironmentProvider` - Environment variables and application properties
 
-**Core Features**:
+**Core Features** (both implementations):
 - Zero-config auto-configuration via `spring.factories`
 - REST API for programmatic access
 - Beautiful single-page web dashboard

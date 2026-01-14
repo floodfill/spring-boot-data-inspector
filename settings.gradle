@@ -1,4 +1,5 @@
 rootProject.name = 'spring-boot-data-inspector'
 
 include 'data-inspector'
+include 'data-inspector-scala'
 include 'demo-app'
