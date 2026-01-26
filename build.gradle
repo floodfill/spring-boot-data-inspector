@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-    group = 'com.example'
+    group = 'io.github.kanxiao'
     version = '1.0.0'
 
     repositories {

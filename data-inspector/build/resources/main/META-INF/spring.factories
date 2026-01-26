@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.example.datainspector.config.DataInspectorAutoConfiguration
+io.github.kanxiao.spring.inspector.config.DataInspectorAutoConfiguration

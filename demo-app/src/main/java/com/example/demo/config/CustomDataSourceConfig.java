@@ -4,7 +4,7 @@
  */
 package com.example.demo.config;
 
-import com.example.datainspector.registry.CustomDataSourceRegistry;
+import io.github.kanxiao.spring.inspector.registry.CustomDataSourceRegistry;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;

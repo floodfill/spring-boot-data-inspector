@@ -2,8 +2,8 @@
   "groups": [
     {
       "name": "data-inspector",
-      "type": "com.example.datainspector.config.DataInspectorProperties",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties"
+      "type": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties"
     }
   ],
   "properties": [
@@ -11,7 +11,7 @@
       "name": "data-inspector.allowed-roles",
       "type": "java.lang.String[]",
       "description": "Allowed roles to access Data Inspector (when requireAuth is true)",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": [
         "ADMIN",
         "DEVELOPER"
@@ -21,112 +21,112 @@
       "name": "data-inspector.base-path",
       "type": "java.lang.String",
       "description": "Base path for the Data Inspector UI",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": "\/data-inspector"
     },
     {
       "name": "data-inspector.discover-beans",
       "type": "java.lang.Boolean",
       "description": "Enable auto-discovery of Spring beans",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.discover-caches",
       "type": "java.lang.Boolean",
       "description": "Enable auto-discovery of caches",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.enabled",
       "type": "java.lang.Boolean",
       "description": "Enable or disable the Data Inspector",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.environment-enabled",
       "type": "java.lang.Boolean",
       "description": "Enable environment and properties monitoring",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.export-enabled",
       "type": "java.lang.Boolean",
       "description": "Enable export functionality",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.jpa-enabled",
       "type": "java.lang.Boolean",
       "description": "Enable JPA\/SQL integration",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.jvm-metrics-enabled",
       "type": "java.lang.Boolean",
       "description": "Enable JVM metrics monitoring",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.mask-sensitive-data",
       "type": "java.lang.Boolean",
       "description": "Mask sensitive property values (password, secret, token, etc.)",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.max-export-records",
       "type": "java.lang.Integer",
       "description": "Maximum records to export at once",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": 10000
     },
     {
       "name": "data-inspector.max-tracked-http-requests",
       "type": "java.lang.Integer",
       "description": "Maximum number of HTTP requests to track",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": 1000
     },
     {
       "name": "data-inspector.mongodb-enabled",
       "type": "java.lang.Boolean",
       "description": "Enable MongoDB integration",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.require-auth",
       "type": "java.lang.Boolean",
       "description": "Require authentication to access Data Inspector When true, endpoints are secured using Spring Security if available",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": false
     },
     {
       "name": "data-inspector.scheduled-tasks-enabled",
       "type": "java.lang.Boolean",
       "description": "Enable scheduled tasks monitoring",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.telemetry-enabled",
       "type": "java.lang.Boolean",
       "description": "Enable telemetry and usage analytics Helps improve Data Inspector by understanding usage patterns",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     },
     {
       "name": "data-inspector.track-http-requests",
       "type": "java.lang.Boolean",
       "description": "Enable HTTP request tracking",
-      "sourceType": "com.example.datainspector.config.DataInspectorProperties",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
     }
   ],

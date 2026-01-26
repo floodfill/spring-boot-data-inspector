@@ -1,5 +1,4 @@
-rootProject.name = 'spring-boot-data-inspector'
+rootProject.name = 'spring-inspector'
 
 include 'data-inspector'
-include 'data-inspector-scala'
 include 'demo-app'
