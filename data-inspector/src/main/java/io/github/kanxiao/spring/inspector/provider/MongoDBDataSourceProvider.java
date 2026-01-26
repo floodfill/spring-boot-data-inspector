@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * Provides MongoDB statistics and information
  */
 @Slf4j
-@Component
 public class MongoDBDataSourceProvider implements DataSourceProvider {
 
     private final MongoTemplate mongoTemplate;

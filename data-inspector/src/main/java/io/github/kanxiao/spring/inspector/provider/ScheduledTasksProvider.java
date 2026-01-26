@@ -24,8 +24,6 @@ import java.util.concurrent.ScheduledFuture;
  * Shows all @Scheduled tasks and their schedules
  */
 @Slf4j
-@Component
-@ConditionalOnBean(ScheduledAnnotationBeanPostProcessor.class)
 public class ScheduledTasksProvider implements DataSourceProvider {
 
     private final ScheduledAnnotationBeanPostProcessor postProcessor;

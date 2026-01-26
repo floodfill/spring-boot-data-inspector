@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * Useful for debugging configuration issues in production
  */
 @Slf4j
-@Component
 public class EnvironmentProvider implements DataSourceProvider {
 
     private final Environment environment;

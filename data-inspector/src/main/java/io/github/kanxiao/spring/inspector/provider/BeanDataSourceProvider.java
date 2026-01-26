@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * Exposes Spring beans and their state for inspection
  */
 @Slf4j
-@Component
 public class BeanDataSourceProvider implements DataSourceProvider {
 
     private final ApplicationContext applicationContext;

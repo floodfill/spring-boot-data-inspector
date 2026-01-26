@@ -8,14 +8,14 @@
           <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-configuration-processor/3.4.1/8dfcdae21f559be9c8a4d6d515e77cfd1d9c06a8/spring-boot-configuration-processor-3.4.1.jar" />
           <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
         </processorPath>
-        <module name="spring-boot-data-inspector.data-inspector.main" />
+        <module name="spring-inspector.data-inspector.main" />
       </profile>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.36/5a30490a6e14977d97d9c73c924c1f1b5311ea95/lombok-1.18.36.jar" />
         </processorPath>
-        <module name="spring-boot-data-inspector.demo-app.main" />
+        <module name="spring-inspector.demo-app.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17">
@@ -37,6 +37,12 @@
       <module name="spring-boot-data-inspector.demo-app" options="-parameters" />
       <module name="spring-boot-data-inspector.demo-app.main" options="-parameters" />
       <module name="spring-boot-data-inspector.demo-app.test" options="-parameters" />
+      <module name="spring-inspector.data-inspector" options="-parameters" />
+      <module name="spring-inspector.data-inspector.main" options="-parameters" />
+      <module name="spring-inspector.data-inspector.test" options="-parameters" />
+      <module name="spring-inspector.demo-app" options="-parameters" />
+      <module name="spring-inspector.demo-app.main" options="-parameters" />
+      <module name="spring-inspector.demo-app.test" options="-parameters" />
     </option>
   </component>
 </project>

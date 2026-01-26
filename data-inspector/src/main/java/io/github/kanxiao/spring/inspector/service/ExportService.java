@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * Service for exporting data in various formats (CSV, JSON, Excel)
  */
 @Slf4j
-@Service
 @RequiredArgsConstructor
 public class ExportService {
 

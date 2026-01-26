@@ -18,7 +18,6 @@ import java.util.*;
  * Essential for production debugging
  */
 @Slf4j
-@Component
 public class JvmMetricsProvider implements DataSourceProvider {
 
     private final MemoryMXBean memoryMXBean;

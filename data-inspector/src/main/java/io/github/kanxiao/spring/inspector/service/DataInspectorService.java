@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  * Core service that aggregates all data sources and handles queries
  */
 @Slf4j
-@Service
 public class DataInspectorService {
 
     private final List<DataSourceProvider> providers;

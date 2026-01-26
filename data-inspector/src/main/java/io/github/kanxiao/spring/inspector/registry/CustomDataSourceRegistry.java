@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  * Users can register their own data structures here
  */
 @Slf4j
-@Component
 public class CustomDataSourceRegistry implements DataSourceProvider {
 
     private final Map<String, RegisteredDataSource> dataSources = new ConcurrentHashMap<>();

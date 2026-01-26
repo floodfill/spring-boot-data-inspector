@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * Helps understand how Data Inspector is being used and optimize features
  */
 @Slf4j
-@Service
 public class TelemetryService {
 
     private final DataInspectorProperties properties;

@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
  * Auto-discovers Spring caches
  */
 @Slf4j
-@Component
 public class CacheDataSourceProvider implements DataSourceProvider {
 
     private final CacheManager cacheManager;

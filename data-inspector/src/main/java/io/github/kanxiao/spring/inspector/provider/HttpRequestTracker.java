@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
  * Keeps a rolling buffer of recent requests with timing and status information
  */
 @Slf4j
-@Component
-@ConditionalOnClass(jakarta.servlet.Filter.class)
 public class HttpRequestTracker implements DataSourceProvider, Filter {
 
     private static final int MAX_TRACKED_REQUESTS = 1000;

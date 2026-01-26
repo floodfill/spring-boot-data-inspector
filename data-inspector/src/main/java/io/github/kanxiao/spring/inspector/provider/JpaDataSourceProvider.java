@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
  * Discovers all JPA entities and allows querying them
  */
 @Slf4j
-@Component
 public class JpaDataSourceProvider implements DataSourceProvider {
 
     private final EntityManagerFactory entityManagerFactory;
