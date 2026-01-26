@@ -100,4 +100,19 @@ public class DataInspectorProperties {
      * Maximum records to export at once
      */
     private int maxExportRecords = 10000;
+
+    /**
+     * Enable SQL Console (Danger Zone)
+     */
+    private boolean sqlConsoleEnabled = false;
+
+    /**
+     * Enable Logging Inspector
+     */
+    private boolean loggingEnabled = true;
+    
+    /**
+     * Packages to scan for application beans
+     */
+    private String[] applicationPackages = {"io.github.kanxiao", "com.example"};
 }

@@ -48,6 +48,15 @@ public class DataInspectorService {
         return provider.query(dataSourceId, filters, limit, offset);
     }
 
+    public Object executeAction(String dataSourceId, String action, Map<String, Object> params) {
+        DataSourceProvider provider = providers.stream()
+                .filter(p -> p.supports(dataSourceId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No provider found for data source: " + dataSourceId));
+
+        return provider.executeAction(dataSourceId, action, params);
+    }
+
     /**
      * Get a specific data source by ID
      */

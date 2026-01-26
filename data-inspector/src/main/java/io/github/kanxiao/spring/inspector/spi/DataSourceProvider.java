@@ -33,4 +33,15 @@ public interface DataSourceProvider {
      * Check if this provider can handle the given data source
      */
     boolean supports(String dataSourceId);
+
+    /**
+     * Execute an action on a data source
+     * @param dataSourceId The ID of the data source
+     * @param action The action name
+     * @param params Action parameters
+     * @return Result object
+     */
+    default Object executeAction(String dataSourceId, String action, Map<String, Object> params) {
+        throw new UnsupportedOperationException("Action not supported: " + action);
+    }
 }

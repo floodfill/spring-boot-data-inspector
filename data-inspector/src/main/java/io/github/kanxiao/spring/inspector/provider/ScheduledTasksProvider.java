@@ -195,4 +195,28 @@ public class ScheduledTasksProvider implements DataSourceProvider {
         if (seconds > 0) return String.format("%ds", seconds);
         return String.format("%dms", millis);
     }
+
+    @Override
+    public Object executeAction(String dataSourceId, String action, Map<String, Object> params) {
+        if ("triggerTask".equals(action)) {
+            String taskString = (String) params.get("taskString");
+            if (taskString == null) {
+                throw new IllegalArgumentException("taskString is required");
+            }
+            
+            Set<ScheduledTask> scheduledTasks = postProcessor.getScheduledTasks();
+            for (ScheduledTask task : scheduledTasks) {
+                if (task.getTask().getRunnable().toString().equals(taskString)) {
+                     try {
+                         task.getTask().getRunnable().run();
+                         return Map.of("success", true, "message", "Task triggered successfully");
+                     } catch (Exception e) {
+                         return Map.of("success", false, "error", e.getMessage());
+                     }
+                }
+            }
+            throw new IllegalArgumentException("Task not found: " + taskString);
+        }
+        throw new UnsupportedOperationException("Unknown action: " + action);
+    }
 }

@@ -28,6 +28,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -129,6 +130,20 @@ public class DataInspectorAutoConfiguration {
     @ConditionalOnClass(ScheduledAnnotationBeanPostProcessor.class)
     public ScheduledTasksProvider scheduledTasksProvider(Optional<ScheduledAnnotationBeanPostProcessor> postProcessor) {
         return new ScheduledTasksProvider(postProcessor);
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "data-inspector.sql-console-enabled", havingValue = "true")
+    @ConditionalOnClass(DataSource.class)
+    @ConditionalOnBean(DataSource.class)
+    public SqlDataSourceProvider sqlDataSourceProvider(DataSource dataSource) {
+        return new SqlDataSourceProvider(dataSource);
+    }
+    
+    @Bean
+    @ConditionalOnProperty(name = "data-inspector.logging-enabled", havingValue = "true", matchIfMissing = true)
+    public LoggingDataSourceProvider loggingDataSourceProvider() {
+        return new LoggingDataSourceProvider();
     }
 
     @Bean

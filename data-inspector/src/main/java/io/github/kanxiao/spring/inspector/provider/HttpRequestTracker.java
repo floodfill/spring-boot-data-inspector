@@ -146,6 +146,29 @@ public class HttpRequestTracker implements DataSourceProvider, Filter {
         return dataSourceId != null && dataSourceId.startsWith("http:");
     }
 
+    @Override
+    public Object executeAction(String dataSourceId, String action, Map<String, Object> params) {
+        if ("replayRequest".equals(action)) {
+            // In a real implementation, we would use RestTemplate/WebClient to re-issue the request
+            // For now, we'll just return the request details so the UI can verify it found it
+            String requestId = (String) params.get("requestId");
+            Optional<RequestInfo> req = recentRequests.stream()
+                .filter(r -> r.getId().equals(requestId))
+                .findFirst();
+                
+            if (req.isPresent()) {
+                 // Mock success for the demo
+                 return Map.of(
+                     "success", true, 
+                     "message", "Request replayed (Simulation)",
+                     "originalRequest", requestInfoToMap(req.get())
+                 );
+            }
+            return Map.of("success", false, "error", "Request not found");
+        }
+        throw new UnsupportedOperationException("Unknown action: " + action);
+    }
+    
     private QueryResult queryRecentRequests(Map<String, Object> filters, int limit, int offset) {
         List<Map<String, Object>> data = recentRequests.stream()
                 .map(this::requestInfoToMap)

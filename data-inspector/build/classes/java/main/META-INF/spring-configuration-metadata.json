@@ -18,6 +18,16 @@
       ]
     },
     {
+      "name": "data-inspector.application-packages",
+      "type": "java.lang.String[]",
+      "description": "Packages to scan for application beans",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
+      "defaultValue": [
+        "io.github.kanxiao",
+        "com.example"
+      ]
+    },
+    {
       "name": "data-inspector.base-path",
       "type": "java.lang.String",
       "description": "Base path for the Data Inspector UI",
@@ -74,6 +84,13 @@
       "defaultValue": true
     },
     {
+      "name": "data-inspector.logging-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable Logging Inspector",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
+      "defaultValue": true
+    },
+    {
       "name": "data-inspector.mask-sensitive-data",
       "type": "java.lang.Boolean",
       "description": "Mask sensitive property values (password, secret, token, etc.)",
@@ -114,6 +131,13 @@
       "description": "Enable scheduled tasks monitoring",
       "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
       "defaultValue": true
+    },
+    {
+      "name": "data-inspector.sql-console-enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable SQL Console (Danger Zone)",
+      "sourceType": "io.github.kanxiao.spring.inspector.config.DataInspectorProperties",
+      "defaultValue": false
     },
     {
       "name": "data-inspector.telemetry-enabled",

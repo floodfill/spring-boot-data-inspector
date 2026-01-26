@@ -80,6 +80,20 @@ public class DataInspectorController {
     }
 
     /**
+     * Execute an action on a data source
+     */
+    @PostMapping("/datasources/{id}/action/{action}")
+    public Object executeAction(
+            @PathVariable String id,
+            @PathVariable String action,
+            @RequestBody Map<String, Object> params,
+            @RequestHeader(value = "X-User-Id", required = false) String userId) {
+
+        // telemetryService.trackAction(id, action, userId); // Add this later
+        return dataInspectorService.executeAction(id, action, params);
+    }
+
+    /**
      * Export data source to various formats (csv, json, excel, html, markdown)
      */
     @GetMapping("/datasources/{id}/export")

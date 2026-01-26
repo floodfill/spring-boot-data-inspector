@@ -3,477 +3,504 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Inspector</title>
+    <title>Spring Inspector</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a1a; min-height: 100vh; }
+        .container { display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 300px; background: #fff; border-right: 1px solid #e1e4e8; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 20px; border-bottom: 1px solid #e1e4e8; background: #fafbfc; }
+        .sidebar-header h1 { font-size: 20px; color: #2c3e50; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .logo-icon { width: 24px; height: 24px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 6px; }
+        
+        .nav-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .nav-section { margin-bottom: 20px; }
+        .nav-section-title { font-size: 11px; text-transform: uppercase; color: #6c757d; font-weight: 600; padding: 5px 10px; margin-bottom: 5px; letter-spacing: 0.5px; }
+        
+        .nav-item { padding: 10px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 14px; color: #4a5568; transition: all 0.2s; border: 1px solid transparent; }
+        .nav-item:hover { background: #f8f9fa; }
+        .nav-item.active { background: #eff6ff; color: #2563eb; border-color: #bfdbfe; font-weight: 500; }
+        .nav-item-icon { font-size: 16px; opacity: 0.7; width: 20px; text-align: center; }
+        .nav-item.active .nav-item-icon { opacity: 1; }
+        
+        .badge { font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: auto; font-weight: 600; }
+        .badge-gray { background: #e9ecef; color: #495057; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        
+        /* Main Content */
+        .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #fff; }
+        .header { padding: 20px 30px; border-bottom: 1px solid #e1e4e8; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .header-title h2 { font-size: 24px; font-weight: 600; color: #1a202c; }
+        .header-subtitle { font-size: 14px; color: #718096; margin-top: 4px; }
+        
+        .actions { display: flex; gap: 10px; }
+        .btn { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid #e2e8f0; background: white; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .btn:hover { background: #f8fafc; border-color: #cbd5e0; }
+        .btn-primary { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .btn-primary:hover { background: #2563eb; border-color: #2563eb; }
+        .btn-danger { background: #ef4444; color: white; border-color: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-sm { padding: 4px 10px; font-size: 12px; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
+        .content-body { flex: 1; overflow-y: auto; padding: 30px; position: relative; }
+        
+        /* Tables */
+        .table-container { border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th { background: #f8fafc; padding: 12px 16px; text-align: left; font-weight: 600; color: #475569; border-bottom: 1px solid #e2e8f0; white-space: nowrap; position: sticky; top: 0; }
+        td { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; color: #334155; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #f8fafc; }
+        
+        /* Specific Views */
+        .log-level-select { padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e0; font-size: 12px; }
+        .log-level-INFO { color: #059669; font-weight: 600; }
+        .log-level-WARN { color: #d97706; font-weight: 600; }
+        .log-level-ERROR { color: #dc2626; font-weight: 600; }
+        .log-level-DEBUG { color: #2563eb; font-weight: 600; }
+        
+        .sql-console { display: flex; flex-direction: column; height: 100%; gap: 20px; }
+        .sql-editor { width: 100%; height: 200px; padding: 15px; font-family: 'Monaco', 'Menlo', monospace; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; resize: vertical; background: #1e293b; color: #e2e8f0; }
+        .sql-results { flex: 1; overflow: auto; min-height: 200px; }
+        
+        .graph-container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #fff; }
+        
+        .empty-state { text-align: center; color: #a0aec0; margin-top: 100px; }
+        .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+        
+        .toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 24px; background: #333; color: white; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(100px); transition: transform 0.3s; z-index: 1000; }
+        .toast.show { transform: translateY(0); }
+        .toast.success { background: #059669; }
+        .toast.error { background: #dc2626; }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .subtitle {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 20px;
-            align-items: start;
-        }
-
-        .sidebar {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 20px;
-        }
-
-        .sidebar h2 {
-            font-size: 20px;
-            margin-bottom: 16px;
-            color: #667eea;
-        }
-
-        .data-source-list {
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-        }
-
-        .data-source-item {
-            padding: 14px;
-            margin-bottom: 8px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-        }
-
-        .data-source-item:hover {
-            background: #e9ecef;
-            transform: translateX(4px);
-        }
-
-        .data-source-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: #667eea;
-        }
-
-        .data-source-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .data-source-meta {
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        .data-source-item.active .data-source-meta {
-            opacity: 0.9;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-right: 6px;
-            text-transform: uppercase;
-        }
-
-        .badge-cache { background: #e3f2fd; color: #1976d2; }
-        .badge-bean { background: #f3e5f5; color: #7b1fa2; }
-        .badge-mongodb { background: #e8f5e9; color: #388e3c; }
-        .badge-custom { background: #fff3e0; color: #f57c00; }
-
-        .data-source-item.active .badge {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-
-        .content {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            min-height: 600px;
-        }
-
-        .content h2 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: #667eea;
-        }
-
-        .content-description {
-            color: #6c757d;
-            margin-bottom: 24px;
-            font-size: 14px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .stat-label {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .controls {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        input, select {
-            padding: 10px 16px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .data-table-container {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid #e9ecef;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background: #f8f9fa;
-        }
-
-        th {
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            color: #495057;
-            border-bottom: 2px solid #dee2e6;
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 14px 16px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        .json-viewer {
-            background: #f8f9fa;
-            padding: 16px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 13px;
-            line-height: 1.6;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px;
-            color: #6c757d;
-            font-size: 18px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: #6c757d;
-        }
-
-        .empty-state-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.3;
-        }
-
-        .pagination {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .refresh-indicator {
-            display: inline-block;
-            animation: spin 1s linear infinite;
-            margin-left: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                position: relative;
-            }
-        }
+        /* Loading Spinner */
+        .spinner { width: 20px; height: 20px; border: 2px solid #e2e8f0; border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>📊 Data Inspector</h1>
-            <p class="subtitle">Beautiful debugging dashboard for your Spring Boot application</p>
-        </header>
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1><div class="logo-icon"></div> Spring Inspector</h1>
+            </div>
+            <div class="nav-list" id="navList">
+                <div style="padding: 20px; text-align: center; color: #a0aec0;">Loading...</div>
+            </div>
+        </aside>
 
-        <div class="main-content">
-            <aside class="sidebar">
-                <h2>Data Sources</h2>
-                <div class="data-source-list" id="dataSourceList">
-                    <div class="loading">Loading...</div>
+        <main class="main">
+            <header class="header" id="header">
+                <div class="header-title">
+                    <h2 id="pageTitle">Welcome</h2>
+                    <p class="header-subtitle" id="pageSubtitle">Select a data source to begin</p>
                 </div>
-            </aside>
-
-            <main class="content" id="mainContent">
+                <div class="actions" id="headerActions"></div>
+            </header>
+            
+            <div class="content-body" id="contentBody">
                 <div class="empty-state">
-                    <div class="empty-state-icon">🔍</div>
-                    <h3>Select a data source to explore</h3>
-                    <p>Choose from the list on the left to view and query your data</p>
+                    <div class="empty-icon">👋</div>
+                    <h3>Welcome to Spring Inspector</h3>
+                    <p>Select a tool from the sidebar to inspect your application.</p>
                 </div>
-            </main>
-        </div>
+            </div>
+        </main>
     </div>
 
+    <div id="toast" class="toast">Action completed</div>
+
     <script>
-        const API_BASE = '/data-inspector/api';
-        let currentDataSource = null;
-        let allDataSources = [];
+        const API = '/data-inspector/api';
+        let currentDsId = null;
+        let mermaidInitialized = false;
 
-        // Load all data sources
-        async function loadDataSources() {
+        // Icons map
+        const ICONS = {
+            'bean': '📦',
+            'bean-graph': '🕸️',
+            'logging': '📝',
+            'http-requests': '🌐',
+            'http-stats': '📊',
+            'scheduled': '⏰',
+            'jpa-entity': '🗄️',
+            'jpa-overview': '💾',
+            'mongodb': '🍃',
+            'mongodb-collection': '📄',
+            'sql-console': '🐘',
+            'custom': '🔧'
+        };
+
+        async function init() {
             try {
-                const response = await fetch(`${API_BASE}/datasources`);
-                allDataSources = await response.json();
-                renderDataSources(allDataSources);
-            } catch (error) {
-                console.error('Failed to load data sources:', error);
-                document.getElementById('dataSourceList').innerHTML =
-                    '<div class="empty-state">Failed to load data sources</div>';
+                const res = await fetch(`${API}/datasources`);
+                const dataSources = await res.json();
+                renderSidebar(dataSources);
+            } catch (e) {
+                console.error(e);
+                showToast('Failed to load data sources', 'error');
             }
         }
 
-        // Render data source list
-        function renderDataSources(dataSources) {
-            const list = document.getElementById('dataSourceList');
+        function renderSidebar(dataSources) {
+            const groups = {
+                'Core': [],
+                'Data': [],
+                'Web': [],
+                'Tools': []
+            };
 
-            if (dataSources.length === 0) {
-                list.innerHTML = '<div class="empty-state">No data sources found</div>';
-                return;
-            }
-
-            list.innerHTML = dataSources.map(ds => `
-                <div class="data-source-item" onclick="selectDataSource('${ds.id}')">
-                    <div class="data-source-name">
-                        <span class="badge badge-${ds.type}">${ds.type}</span>
-                        ${ds.name}
-                    </div>
-                    <div class="data-source-meta">
-                        ${ds.size >= 0 ? `${ds.size.toLocaleString()} items` : 'Unknown size'}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Select and load a data source
-        async function selectDataSource(id) {
-            currentDataSource = allDataSources.find(ds => ds.id === id);
-
-            // Update active state
-            document.querySelectorAll('.data-source-item').forEach(item => {
-                item.classList.remove('active');
+            dataSources.forEach(ds => {
+                if (ds.type.startsWith('bean')) groups['Core'].push(ds);
+                else if (ds.type.startsWith('jpa') || ds.type.startsWith('mongo')) groups['Data'].push(ds);
+                else if (ds.type.startsWith('http')) groups['Web'].push(ds);
+                else groups['Tools'].push(ds);
             });
-            event.target.closest('.data-source-item').classList.add('active');
 
-            // Load data
-            await loadDataSourceData(id);
+            const nav = document.getElementById('navList');
+            nav.innerHTML = Object.entries(groups).map(([group, items]) => {
+                if (items.length === 0) return '';
+                return `
+                    <div class="nav-section">
+                        <div class="nav-section-title">${group}</div>
+                        ${items.map(ds => `
+                            <div class="nav-item" onclick="loadView('${ds.id}', '${ds.type}', '${ds.name}')" id="nav-${ds.id}">
+                                <span class="nav-item-icon">${ICONS[ds.type] || '📄'}</span>
+                                ${ds.name}
+                                ${ds.size >= 0 ? `<span class="badge badge-gray">${ds.size}</span>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }).join('');
         }
 
-        // Load data for a specific data source
-        async function loadDataSourceData(id, limit = 100, offset = 0) {
-            const content = document.getElementById('mainContent');
-            content.innerHTML = '<div class="loading">Loading data...</div>';
+        async function loadView(id, type, name) {
+            currentDsId = id;
+            
+            // Update UI active state
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const activeEl = document.getElementById(`nav-${id}`);
+            if (activeEl) activeEl.classList.add('active');
 
-            try {
-                const response = await fetch(
-                    `${API_BASE}/datasources/${encodeURIComponent(id)}/query?limit=${limit}&offset=${offset}`
-                );
-                const result = await response.json();
-                renderDataSourceContent(currentDataSource, result);
-            } catch (error) {
-                console.error('Failed to load data:', error);
-                content.innerHTML = '<div class="empty-state">Failed to load data</div>';
-            }
-        }
-
-        // Render data source content
-        function renderDataSourceContent(dataSource, queryResult) {
-            const content = document.getElementById('mainContent');
-
-            let html = `
-                <h2>${dataSource.name}</h2>
-                <p class="content-description">${dataSource.description || ''}</p>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-label">Total Items</div>
-                        <div class="stat-value">${queryResult.totalCount.toLocaleString()}</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Type</div>
-                        <div class="stat-value">${dataSource.type}</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-label">Showing</div>
-                        <div class="stat-value">${queryResult.data.length}</div>
-                    </div>
-                </div>
-
-                <div class="controls">
-                    <button onclick="refreshData()">🔄 Refresh</button>
-                    <button onclick="exportData()">📥 Export JSON</button>
-                    <input type="number" id="limitInput" value="100" min="1" max="1000"
-                           placeholder="Limit" style="width: 100px;">
-                    <button onclick="loadDataSourceData('${dataSource.id}',
-                           document.getElementById('limitInput').value, 0)">Apply Limit</button>
-                </div>
+            // Update Header
+            document.getElementById('pageTitle').innerText = name;
+            document.getElementById('pageSubtitle').innerText = id;
+            
+            const actions = document.getElementById('headerActions');
+            actions.innerHTML = `
+                <button class="btn" onclick="refreshCurrentView()">🔄 Refresh</button>
+                <button class="btn" onclick="window.open('${API}/datasources/${id}/export?format=json')">📥 JSON</button>
             `;
 
-            if (queryResult.data.length === 0) {
-                html += '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No data found</p></div>';
-            } else {
-                html += renderTable(queryResult.data);
+            // Load Content
+            const content = document.getElementById('contentBody');
+            content.innerHTML = '<div style="text-align:center; padding: 50px;"><div class="spinner"></div></div>';
 
-                if (queryResult.totalCount > queryResult.limit) {
-                    html += renderPagination(queryResult);
+            try {
+                // Special Views
+                if (type === 'sql-console') {
+                    renderSqlConsole();
+                    return;
                 }
+                
+                // Standard Data Fetch
+                const res = await fetch(`${API}/datasources/${encodeURIComponent(id)}/query?limit=100`);
+                const result = await res.json();
+                
+                if (type === 'bean-graph') {
+                    renderGraph(result);
+                } else if (type === 'logging') {
+                    renderLogging(result);
+                } else if (type === 'scheduled') {
+                    renderScheduled(result);
+                } else if (type === 'http-requests') {
+                    renderHttp(result);
+                } else {
+                    renderGenericTable(result);
+                }
+            } catch (e) {
+                content.innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Error loading data</h3><p>${e.message}</p></div>`;
             }
-
-            content.innerHTML = html;
         }
 
-        // Render data table
-        function renderTable(data) {
-            if (data.length === 0) return '';
+        function refreshCurrentView() {
+            if (currentDsId) {
+                // Trigger click on active nav item to reload
+                document.getElementById(`nav-${currentDsId}`).click();
+            }
+        }
 
-            const keys = [...new Set(data.flatMap(Object.keys))];
+        // --- Renderers ---
 
-            return `
-                <div class="data-table-container">
+        function renderGenericTable(result) {
+            if (!result.data || result.data.length === 0) {
+                document.getElementById('contentBody').innerHTML = '<div class="empty-state"><p>No data found</p></div>';
+                return;
+            }
+            const keys = Object.keys(result.data[0]);
+            const html = `
+                <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>${keys.map(key => `<th>${key}</th>`).join('')}</tr>
-                        </thead>
+                        <thead><tr>${keys.map(k => `<th>${k}</th>`).join('')}</tr></thead>
                         <tbody>
-                            ${data.map(row => `
+                            ${result.data.map(row => `
+                                <tr>${keys.map(k => `<td>${formatValue(row[k])}</td>`).join('')}</tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 10px; color: #718096; font-size: 13px;">Total: ${result.totalCount}</div>
+            `;
+            document.getElementById('contentBody').innerHTML = html;
+        }
+
+        function renderLogging(result) {
+            const html = `
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Logger</th><th>Configured</th><th>Effective</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${result.data.map(row => `
                                 <tr>
-                                    ${keys.map(key => `
-                                        <td>${formatValue(row[key])}</td>
-                                    `).join('')}
+                                    <td><div style="font-weight:500">${row.name}</div></td>
+                                    <td>${row.configuredLevel || '<span style="color:#cbd5e0">-</span>'}</td>
+                                    <td><span class="log-level-${row.effectiveLevel}">${row.effectiveLevel}</span></td>
+                                    <td>
+                                        <select class="log-level-select" onchange="setLogLevel('${row.name}', this.value)">
+                                            <option value="">Change...</option>
+                                            <option value="OFF">OFF</option>
+                                            <option value="ERROR">ERROR</option>
+                                            <option value="WARN">WARN</option>
+                                            <option value="INFO">INFO</option>
+                                            <option value="DEBUG">DEBUG</option>
+                                            <option value="TRACE">TRACE</option>
+                                        </select>
+                                    </td>
                                 </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            document.getElementById('contentBody').innerHTML = html;
+        }
+
+        function renderScheduled(result) {
+            const html = `
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Task</th><th>Schedule</th><th>Next Run</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${result.data.map(row => `
+                                <tr>
+                                    <td>
+                                        <div style="font-size: 12px; color: #718096;">${row.taskClass}</div>
+                                        <div style="font-weight:500; margin-top:2px;">${row.taskString}</div>
+                                    </td>
+                                    <td><span class="badge badge-blue">${row.schedule}</span></td>
+                                    <td>${row.nextExecutionIn || '-'}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="triggerTask('${row.taskString.replace(/'/g, "\\'")}')">▶ Run Now</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            document.getElementById('contentBody').innerHTML = html;
+        }
+        
+        function renderHttp(result) {
+            const html = `
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Method</th><th>Status</th><th>URI</th><th>Time</th><th>Action</th></tr></thead>
+                        <tbody>
+                            ${result.data.map(row => `
+                                <tr>
+                                    <td><span class="badge badge-gray">${row.method}</span></td>
+                                    <td>${formatStatus(row.statusCode)}</td>
+                                    <td style="max-width: 400px; overflow:hidden; text-overflow:ellipsis;">${row.uri}</td>
+                                    <td>${row.durationMs}ms</td>
+                                    <td>
+                                        <button class="btn btn-sm" onclick="replayRequest('${row.id}')">🔁 Replay</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            document.getElementById('contentBody').innerHTML = html;
+        }
+
+        function renderSqlConsole() {
+            const html = `
+                <div class="sql-console">
+                    <div>
+                        <textarea id="sqlInput" class="sql-editor" placeholder="SELECT * FROM users LIMIT 10..."></textarea>
+                        <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+                             <button class="btn btn-primary" onclick="runSql()">▶ Execute Query</button>
+                        </div>
+                    </div>
+                    <div id="sqlResults" class="sql-results">
+                        <div class="empty-state" style="margin-top: 50px;"><p>Results will appear here</p></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('contentBody').innerHTML = html;
+        }
+
+        function renderGraph(result) {
+            // Need metadata for graph, which comes from discover, but query returns it too? 
+            // Actually our query impl for graph returns empty list, metadata is in the sidebar info.
+            // Let's refetch dataSource info to get metadata
+            fetch(`${API}/datasources/${encodeURIComponent(currentDsId)}`)
+                .then(r => r.json())
+                .then(dsInfo => {
+                    const nodes = dsInfo.metadata.nodes || [];
+                    const edges = dsInfo.metadata.edges || [];
+                    
+                    if (nodes.length === 0) {
+                         document.getElementById('contentBody').innerHTML = '<div class="empty-state">No graph data available</div>';
+                         return;
+                    }
+                    
+                    // Build Mermaid definition
+                    let def = 'graph TD\n';
+                    // Add styles
+                    def += 'classDef bean fill:#fff,stroke:#3b82f6,stroke-width:2px;\n';
+                    
+                    nodes.forEach(n => {
+                        const shortName = n.split('.').pop().replace(/Bean$/, '');
+                        // Clean ID
+                        const safeId = n.replace(/[^a-zA-Z0-9]/g, '_');
+                        def += `${safeId}[${shortName}]:::bean\n`;
+                    });
+                    
+                    edges.forEach(e => {
+                         const safeSrc = e.source.replace(/[^a-zA-Z0-9]/g, '_');
+                         const safeTgt = e.target.replace(/[^a-zA-Z0-9]/g, '_');
+                         // Only add if both nodes exist in our filtered set
+                         def += `${safeSrc} --> ${safeTgt}\n`;
+                    });
+                    
+                    const html = `<div class="graph-container"><div class="mermaid">${def}</div></div>`;
+                    document.getElementById('contentBody').innerHTML = html;
+                    
+                    if (!mermaidInitialized) {
+                        mermaid.initialize({ startOnLoad: true });
+                        mermaidInitialized = true;
+                    }
+                    mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                });
+        }
+
+        // --- Actions ---
+
+        async function setLogLevel(loggerName, level) {
+            if (!level) return;
+            await executeAction('setLogLevel', { loggerName, level });
+        }
+
+        async function triggerTask(taskString) {
+            await executeAction('triggerTask', { taskString });
+        }
+        
+        async function replayRequest(requestId) {
+             await executeAction('replayRequest', { requestId });
+        }
+
+        async function runSql() {
+            const sql = document.getElementById('sqlInput').value;
+            if (!sql) return;
+            
+            const btn = document.querySelector('.sql-console .btn-primary');
+            btn.disabled = true;
+            btn.innerText = 'Running...';
+            
+            try {
+                const res = await fetch(`${API}/datasources/sql:console/action/executeQuery`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sql })
+                });
+                const result = await res.json();
+                
+                if (result.success) {
+                    const dataWrapper = { data: result.data, totalCount: result.count };
+                    document.getElementById('sqlResults').innerHTML = `
+                        <div style="padding: 10px; color: #059669; font-size: 13px;">✓ ${result.count} rows found</div>
+                        ${renderGenericTableStr(dataWrapper)}
+                    `;
+                } else {
+                     document.getElementById('sqlResults').innerHTML = `
+                        <div style="padding: 15px; background: #fef2f2; color: #dc2626; border-radius: 6px; border: 1px solid #fecaca;">
+                            <strong>Error:</strong> ${result.error}
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                 showToast(e.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = '▶ Execute Query';
+            }
+        }
+
+        async function executeAction(action, params) {
+            try {
+                const res = await fetch(`${API}/datasources/${encodeURIComponent(currentDsId)}/action/${action}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(params)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    showToast(result.message || 'Action completed successfully', 'success');
+                    refreshCurrentView(); // Reload data to show changes
+                } else {
+                    showToast(result.error || 'Action failed', 'error');
+                }
+            } catch (e) {
+                showToast(e.message, 'error');
+            }
+        }
+
+        // --- Helpers ---
+
+        function formatValue(v) {
+            if (v === null || v === undefined) return '<span style="color:#cbd5e0">null</span>';
+            if (typeof v === 'boolean') return v ? '✅' : '❌';
+            if (typeof v === 'object') return `<span title="${JSON.stringify(v)}">{...}</span>`;
+            return v;
+        }
+        
+        function formatStatus(code) {
+             if (!code) return '-';
+             let color = '#718096';
+             if (code >= 200 && code < 300) color = '#059669';
+             if (code >= 400 && code < 500) color = '#d97706';
+             if (code >= 500) color = '#dc2626';
+             return `<span style="color:${color}; font-weight:600">${code}</span>`;
+        }
+        
+        // String returning version of generic table for innerHTML usage
+        function renderGenericTableStr(result) {
+            if (!result.data || result.data.length === 0) return '';
+            const keys = Object.keys(result.data[0]);
+            return `
+                <div class="table-container">
+                    <table>
+                        <thead><tr>${keys.map(k => `<th>${k}</th>`).join('')}</tr></thead>
+                        <tbody>
+                            ${result.data.map(row => `
+                                <tr>${keys.map(k => `<td>${formatValue(row[k])}</td>`).join('')}</tr>
                             `).join('')}
                         </tbody>
                     </table>
@@ -481,62 +508,14 @@
             `;
         }
 
-        // Format values for display
-        function formatValue(value) {
-            if (value === null || value === undefined) return '<em>null</em>';
-            if (typeof value === 'object') return `<code>${JSON.stringify(value, null, 2)}</code>`;
-            if (typeof value === 'boolean') return value ? '✓' : '✗';
-            return value;
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.className = `toast ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 3000);
         }
 
-        // Render pagination
-        function renderPagination(result) {
-            const totalPages = Math.ceil(result.totalCount / result.limit);
-            const currentPage = Math.floor(result.offset / result.limit) + 1;
-
-            return `
-                <div class="pagination">
-                    <button ${currentPage === 1 ? 'disabled' : ''}
-                            onclick="changePage(${currentPage - 1})">← Previous</button>
-                    <span>Page ${currentPage} of ${totalPages}</span>
-                    <button ${currentPage === totalPages ? 'disabled' : ''}
-                            onclick="changePage(${currentPage + 1})">Next →</button>
-                </div>
-            `;
-        }
-
-        function changePage(page) {
-            const limit = parseInt(document.getElementById('limitInput').value) || 100;
-            const offset = (page - 1) * limit;
-            loadDataSourceData(currentDataSource.id, limit, offset);
-        }
-
-        function refreshData() {
-            if (currentDataSource) {
-                loadDataSourceData(currentDataSource.id);
-            } else {
-                loadDataSources();
-            }
-        }
-
-        function exportData() {
-            if (!currentDataSource) return;
-
-            fetch(`${API_BASE}/datasources/${encodeURIComponent(currentDataSource.id)}/query?limit=10000`)
-                .then(r => r.json())
-                .then(result => {
-                    const blob = new Blob([JSON.stringify(result.data, null, 2)],
-                                         { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${currentDataSource.name}.json`;
-                    a.click();
-                });
-        }
-
-        // Initialize
-        loadDataSources();
+        init();
     </script>
 </body>
 </html>
